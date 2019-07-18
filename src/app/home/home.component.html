@@ -1,0 +1,68 @@
+<h1>Gerador de Ticket de eventos</h1>
+<div *ngIf="!deviceInfo">Utilize um notebook ou computador para usar o gerador de tickets.</div>
+<form [formGroup]="messageForm" (ngSubmit)="onSubmite()" *ngIf="deviceInfo " >
+  <label>
+    Nome do item:
+    <input type="text" formControlName="name" placeholder="Ex: Água">
+    <div *ngIf="submitted && messageForm.controls.name.errors" class="error">
+      <div *ngIf="messageForm.controls.name.errors.required">O nome do item é obrigatório</div>
+    </div>
+  </label>
+
+  <label>
+    Quantidade de:
+    <input type="text" formControlName="qtdInicio">
+    <div *ngIf="submitted && messageForm.controls.qtdInicio.errors" class="error">
+      <div *ngIf="messageForm.controls.qtdInicio.errors.required">A quantidade é obrigatória</div>
+      <div *ngIf="messageForm.controls.qtdInicio.errors.min">A quantidade é deve ser maior que 29</div>
+      <div *ngIf="messageForm.controls.qtdInicio.errors.pattern">A quantidade é deve ser numérica</div>
+    </div>
+  </label>
+  <label>
+    até:
+    <input type="text" formControlName="qtdFim">
+    <div *ngIf="submitted && messageForm.controls.qtdFim.errors" class="error">
+      <div *ngIf="messageForm.controls.qtdFim.errors.required">A quantidade é obrigatória</div>
+      <div *ngIf="messageForm.controls.qtdFim.errors.min">A quantidade é deve ser maior que 29</div>
+      <div *ngIf="messageForm.controls.qtdFim.errors.pattern">A quantidade é deve ser numérica</div>
+    </div>
+  </label>
+  <label>
+    Cor:
+    <input type="color" formControlName="cor" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)"
+      style="width:85%;">
+  </label>
+  <label style="padding-left: 48px">
+    Cor do texto:
+    <input type="color" formControlName="corFont" id="html5colorpicker" onchange="clickColor(0, -1, -1, 5)"
+      style="width:35%;">
+  </label>
+  <input type="checkbox" name="logoCranberry" formControlName="logoCranberry"> Logo rotaract<br>
+  <br>
+  <div>
+    <input type="submit" value="OK" class="cta">
+  </div>
+  <br>
+  <label>
+    <div *ngIf="flagMaiorTrinta" class="error">A diferença da quantidade deve ser maior que trinta</div>
+  </label>
+
+</form>
+
+<div *ngIf="submitted && sucess" class="results">
+  <input type="button" value="Imprimir" class="cta" (click)="print()">
+  <div id="printDiv">
+    <ul *ngIf="qtdItem > 0">
+      <li *ngFor="let ticket of  ' '.repeat(qtdItem+1).split('') ;let i = index" class="div_grid">
+        <div class="ticket" [ngStyle]="{'background-color':color}">
+          <div class="ticket__content">
+            <span class="number">{{inicio+(i)}}</span>
+            <img *ngIf="!cranberry"  src='./assets/img/roda.png' />
+            <img *ngIf="cranberry"  src='./assets/img/rodaRosa.png' />
+            <p class="ticket__text" [ngStyle]="{'color':colorText}">{{name}}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
